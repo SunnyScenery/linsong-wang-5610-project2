@@ -19,6 +19,7 @@ function Homepage() {
   };
 
   return (
+    
     <Box
       display="flex"
       flexDirection="column"
@@ -72,6 +73,7 @@ function Homepage() {
         <Button variant="contained">Play - Continue</Button>
       </Link>
     </Box>
+    
   );
 }
 
