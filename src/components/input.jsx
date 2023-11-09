@@ -9,8 +9,9 @@ function InputForm(props) {
     setInputValue(event.target.value);
   };
 
-  const handleSubmit = () => {
-    props.callBack();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    props.callback();
     console.log(inputValue);
   };
 
@@ -35,6 +36,12 @@ function InputForm(props) {
       <Button 
         variant="contained" 
         color="primary" 
+        type='submit'
+        onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+                handleSubmit(e);
+            }
+        }}
         onClick={handleSubmit}
       >
         Submit

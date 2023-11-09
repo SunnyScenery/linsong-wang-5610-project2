@@ -3,7 +3,7 @@ import { Box, Paper, Typography } from '@material-ui/core';
 function InputRecord(props) {
 
     const build = (word, colormap) => {
-        console.log(word);
+        console.log(colormap);
         const record = [];
         for (let i = 0; i < word.length; i++) {
             let newColor = 'white';

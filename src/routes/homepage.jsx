@@ -1,25 +1,24 @@
 import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import WordleTitle from "../components/wordle-title";
 import {
   Box,
-  Select,
-  MenuItem,
-  InputLabel,
   FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@material-ui/core";
 import { useState } from "react";
-import { blue } from "@material-ui/core/colors";
 
 function Homepage() {
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedValue, setSelectedValue] = useState("normal");
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
 
   return (
-    
     <Box
       display="flex"
       flexDirection="column"
@@ -33,47 +32,29 @@ function Homepage() {
       <Link to="/rules" style={{ marginBottom: "15px" }}>
         <Button variant="contained">Rules</Button>
       </Link>
-      <FormControl fullWidth style={{ marginBottom: "15px" }}>
-        <InputLabel
-          id="demo-simple-select-label"
-          style={{
-            color: "white",
-          }}
-        >
-          Options
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={selectedValue}
-          label="Options"
+
+      <FormControl component="fieldset" style={{ marginBottom: "15px" }}>
+        <FormLabel component="legend">Difficulty</FormLabel>
+        <RadioGroup
+          aria-label="difficulty"
+          defaultValue="normal"
+          name="radio-buttons-group"
           onChange={handleChange}
-          style={{
-            backgroundColor: blue[500],
-            color: "white",
-          }}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                backgroundColor: blue[500],
-                color: "white",
-              },
-            },
-          }}
         >
-          <MenuItem value={10}>Normal</MenuItem>
-          <MenuItem value={20}>Hard</MenuItem>
-        </Select>
+          <FormControlLabel value="normal" control={<Radio />} label="Normal" />
+          <FormControlLabel value="hard" control={<Radio />} label="Hard" />
+        </RadioGroup>
       </FormControl>
 
-      <Link to="/play">
-        <Button variant="contained" style={{ marginBottom: "15px" }}>Play - New</Button>
+      <Link to="/play" state={{ selectedValue: selectedValue }}>
+        <Button variant="contained" style={{ marginBottom: "15px" }}>
+          Play
+        </Button>
       </Link>
-      <Link to="/play">
+      {/* <Link to="/play">
         <Button variant="contained">Play - Continue</Button>
-      </Link>
+      </Link> */}
     </Box>
-    
   );
 }
 

@@ -4,7 +4,7 @@ function Answer(props) {
 
     return (
         <Typography variant="h4" sx={{ color: 'text.primary' }}>
-            Answer: {props.text}
+            {props.text}
       </Typography>
     )
 }

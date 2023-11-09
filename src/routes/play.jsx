@@ -5,9 +5,10 @@ import {
 } from "@material-ui/core";
 import Answer from "../components/answer";
 import BackButton from "../components/back-button";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { RecordContext } from "../store/records";
 import { InputContext } from "../store/input";
+import { useLocation } from "react-router-dom";
 
 const countCharacterFrequency = (str) => {
     const frequencyMap = {};
@@ -30,9 +31,22 @@ const countCharacterFrequency = (str) => {
 // remember to use lower case.
 function Play() {
 
-    const timesOfRetry = 5;
-    const lengthOfWord = 5;
-    const answer = "apple";
+    const [hint, setHint] = useState((<Answer text="Please enter your answer" />));
+    const location = useLocation();
+    // console.log(location);
+    const { selectedValue } = location.state;
+
+    let timesOfRetry, lengthOfWord;
+
+    if ( selectedValue === "normal" ) {
+        timesOfRetry = 6;
+        lengthOfWord = 6;
+    } else if ( selectedValue === "hard" ) {
+        timesOfRetry = 6;
+        lengthOfWord = 7;
+    }
+
+    const answer = "banana";
     let blank = {};
     blank.word = " ".repeat(lengthOfWord);
     blank.colormap = "0".repeat(lengthOfWord);
@@ -44,7 +58,7 @@ function Play() {
 
     // a set of help functions
     const buildColormap = (word) => {
-        let colormap = "00000"; // length of word
+        let colormap = "00000".split(''); // length of word
         for (let i = 0; i < word.length; i++) {
             if (word[i] === answer[i]) {
                 colormap[i] = "2";
@@ -61,7 +75,7 @@ function Play() {
             }
         }
 
-        return colormap;
+        return colormap.join('');
     }
 
     const buildRecords = (word) => {
@@ -69,10 +83,12 @@ function Play() {
         record.word = word.toLowerCase();
         record.colormap = buildColormap(word.toLowerCase());
 
-        const newRecords = [record];
+        const newRecords = [];
         for (let i = 0; i < records.length; i++) {
             newRecords.push(records[i]);
         }
+        newRecords.push(record);
+
         setRecords(newRecords);
     }
 
@@ -80,15 +96,9 @@ function Play() {
         let recordsUI = [];
         records.forEach((record) => {
             recordsUI.push(
-                <InputRecord key={record.word} word={record.word} colormap={records.colormap} />
+                <InputRecord key={record.word} word={record.word} colormap={record.colormap} />
             )
         })
-
-        // for (let i = 0; i < records.length; i++) {
-        //     recordsUI.push(
-        //         <InputRecord word={records[i].word} colormap={records[i].colormap} />
-        //     )
-        // }
         console.log("length is ", recordsUI.length);
         for (let i = recordsUI.length; i < timesOfRetry; i++) {
             recordsUI.push(
@@ -99,29 +109,31 @@ function Play() {
     }
 
     const validInputCheck = (word) => {
-        if (word.length!== lengthOfWord) {
+        if (word.length !== lengthOfWord) {
             return false;
         }
         return true;
     }
+    
 
-    let hint = (<Answer text="Please enter your answer" />);
     const handleSubmit = () => {
         if (validInputCheck(inputValue)) {
             buildRecords(inputValue);
             // judge, correct or retry or end.
+            console.log("input value is ", inputValue);
             if (inputValue === answer) {
-                hint = (<Answer text={`Correct! Answer is: ${answer}`} />);
+                console.log("in correct");
+                setHint((<Answer text={`Correct! Answer is: ${answer}`} />));
             } else {
                 if (records.length === timesOfRetry) {
-                    hint = (<Answer text={`You are out of tries! Answer is: ${answer}`} />);
+                    setHint((<Answer text={`You are out of tries! Answer is: ${answer}`} />));
                 } else {
-                    hint = (<Answer text="Wrong! Please try again." />);
+                    setHint((<Answer text="Wrong! Please try again." />));
                 }
             }
         } else {
             // hint invalid input.
-            hint = (<Answer text="Invalid Input." />);
+            setHint((<Answer text="Invalid Input." />));
         }
 
         setInputValue("");
@@ -131,7 +143,6 @@ function Play() {
         
         <Box>
             <BackButton />
-            <InputRecord word="abcde" colormap="00000" />
             {buildRecordsUI()}
             {hint}
             <InputForm callback={handleSubmit}/>
