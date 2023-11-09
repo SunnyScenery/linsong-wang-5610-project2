@@ -1,9 +1,9 @@
-import { Button, TextField, Box } from '@material-ui/core';
-import { useContext, useState } from 'react';
-import { InputContext } from '../store/input';
+import { Button, TextField, Box } from "@material-ui/core";
+import { useContext, useState } from "react";
+import { InputContext } from "../store/input";
 
 function InputForm(props) {
-    const [inputValue, setInputValue] = useContext(InputContext);
+  const [inputValue, setInputValue] = useContext(InputContext);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -19,28 +19,28 @@ function InputForm(props) {
     <Box
       component="form"
       sx={{
-        '& > :not(style)': { m: 1 },
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
+        "& > :not(style)": { m: 1 },
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
       noValidate
       autoComplete="off"
     >
-      <TextField 
-        label="Enter text" 
-        variant="outlined" 
-        value={inputValue} 
-        onChange={handleInputChange} 
+      <TextField
+        label="Enter text"
+        variant="outlined"
+        value={inputValue}
+        onChange={handleInputChange}
       />
-      <Button 
-        variant="contained" 
-        color="primary" 
-        type='submit'
+      <Button
+        variant="contained"
+        color="primary"
+        type="submit"
         onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-                handleSubmit(e);
-            }
+          if (e.key === "Enter") {
+            handleSubmit(e);
+          }
         }}
         onClick={handleSubmit}
       >

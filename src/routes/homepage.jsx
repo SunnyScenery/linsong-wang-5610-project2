@@ -10,12 +10,20 @@ import {
   Radio,
 } from "@material-ui/core";
 import { useState } from "react";
+import { useContext } from "react";
+import { RecordContext } from "../store/records";
 
 function Homepage() {
   const [selectedValue, setSelectedValue] = useState("normal");
+  const [records, setRecords] = useContext(RecordContext);
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
+  };
+
+  const clearCache = () => {
+    localStorage.clear();
+    setRecords([]);
   };
 
   return (
@@ -48,12 +56,12 @@ function Homepage() {
 
       <Link to="/play" state={{ selectedValue: selectedValue }}>
         <Button variant="contained" style={{ marginBottom: "15px" }}>
-          Play
+          Play & Continue
         </Button>
       </Link>
-      {/* <Link to="/play">
-        <Button variant="contained">Play - Continue</Button>
-      </Link> */}
+      <Button variant="contained" onClick={clearCache}>
+        Clear Cache
+      </Button>
     </Box>
   );
 }
